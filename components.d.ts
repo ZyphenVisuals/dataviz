@@ -7,12 +7,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AddNumberDialog: typeof import('./src/components/btree/addNumberDialog.vue')['default']
     Button: typeof import('primevue/button')['default']
     ButtonGroup: typeof import('primevue/buttongroup')['default']
     DynamicDialog: typeof import('primevue/dynamicdialog')['default']
     Form: typeof import('@primevue/forms/form')['default']
-    InputNumber: typeof import('primevue/inputnumber')['default']
     InputText: typeof import('primevue/inputtext')['default']
     Menubar: typeof import('primevue/menubar')['default']
     Message: typeof import('primevue/message')['default']
@@ -20,7 +18,6 @@ declare module 'vue' {
     OrganizationChart: typeof import('primevue/organizationchart')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Terminal: typeof import('primevue/terminal')['default']
     Toast: typeof import('primevue/toast')['default']
   }
   export interface ComponentCustomProperties {

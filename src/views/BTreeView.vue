@@ -19,13 +19,7 @@
           raised
           @click="showAddNumber"
         ></Button>
-        <Button
-          icon="pi pi-minus"
-          rounded
-          severity="secondary"
-          raised
-          @click="showRemoveNumber"
-        ></Button>
+        <Button icon="pi pi-minus" rounded severity="secondary" raised></Button>
       </ButtonGroup>
     </div>
   </main>
@@ -38,7 +32,8 @@ import { useToast } from 'primevue/usetoast'
 
 import numberDialog from '@/components/numberDialog.vue'
 
-const data = ref({})
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const data: any = ref({})
 const dialog = useDialog()
 const toast = useToast()
 
@@ -75,7 +70,7 @@ function showToast(message: string, severity: 'success' | 'info' | 'error') {
   }
 }
 
-function addNumber(number) {
+function addNumber(number: number) {
   data.value.label += ' ' + number
   showToast(`Number ${number} added.`, 'success')
 }
@@ -87,7 +82,7 @@ const showAddNumber = () => {
       modal: true,
     },
     onClose: (opt) => {
-      addNumber(opt.data.number)
+      addNumber(opt?.data.number)
     },
   })
 }

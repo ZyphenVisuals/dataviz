@@ -19,10 +19,12 @@
 import { ref, inject } from 'vue'
 
 const resolver = ref()
-const dialogRef = inject('dialogRef')
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const dialogRef: any = inject('dialogRef')
 
-resolver.value = ({ values }) => {
-  const errors = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+resolver.value = ({ values }: any) => {
+  const errors: { number: Array<object> } = {
     number: [],
   }
 
@@ -35,7 +37,8 @@ resolver.value = ({ values }) => {
   return { errors, values }
 }
 
-const onFormSubmit = (e) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const onFormSubmit = (e: any) => {
   if (e.valid) {
     dialogRef.value.close({
       number: e.values.number,
