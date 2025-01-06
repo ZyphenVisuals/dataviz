@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const headerItems = ref([
   { label: 'Home', route: '/' },
@@ -10,6 +10,30 @@ const headerItems = ref([
   },
   { label: 'About', route: '/about' },
 ])
+
+const darkMode = ref(false)
+
+function toggleDarkMode() {
+  document.documentElement.classList.toggle('dark-mode')
+  darkMode.value = !darkMode.value
+
+  localStorage.setItem('darkMode', darkMode.value.toString())
+}
+
+onMounted(() => {
+  // check local storage
+  if (localStorage.getItem('darkMode') === 'true') {
+    toggleDarkMode()
+    return
+  } else if (localStorage.getItem('darkMode') === 'false') {
+    return
+  }
+
+  // check device preference
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    toggleDarkMode()
+  }
+})
 </script>
 
 <template>
@@ -30,6 +54,14 @@ const headerItems = ref([
             <span>{{ item.label }}</span>
             <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down" />
           </a>
+        </template>
+        <template #end>
+          <Button
+            :icon="'pi ' + (darkMode ? 'pi-moon' : 'pi-sun')"
+            variant="outlined"
+            severity="secondary"
+            @click="toggleDarkMode"
+          ></Button>
         </template>
       </Menubar>
     </header>
