@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <main class="flex-1 flex flex-col items-center justify-center">
+  <main class="flex-1 flex flex-col items-center justify-center text-center">
     <h1 class="text-7xl font-bold">
       Zyphen's
       <span
