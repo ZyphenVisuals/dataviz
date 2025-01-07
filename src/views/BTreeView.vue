@@ -58,14 +58,18 @@ type BTreeNode = {
   keys: Array<number>
   children: Array<BTreeNode>
   styleClass?: string
+  key: number
 }
 
 const btree = ref<BTreeNode>({
   keys: [],
   children: [],
+  key: 0,
 })
 const branchingFactor = ref(2)
 const stepMode = ref(true)
+
+let globalKey = 1
 
 const dialog = useDialog()
 const toast = useToast()
@@ -174,6 +178,7 @@ function splitChild(parent: BTreeNode, index: number) {
   const newChild: BTreeNode = {
     keys: [],
     children: [],
+    key: globalKey++,
   }
 
   // insert the new child into the parent
@@ -205,6 +210,7 @@ async function addNumber(number: number) {
     const newRoot = {
       keys: [],
       children: [btree.value],
+      key: globalKey++,
     }
     btree.value = newRoot
 
