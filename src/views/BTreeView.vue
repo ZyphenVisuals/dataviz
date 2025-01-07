@@ -68,7 +68,7 @@ const btree = ref<BTreeNode>({
   children: [],
   key: 0,
 })
-const branchingFactor = ref(2)
+const branchingFactor = ref(3)
 const stepMode = ref(false)
 
 let globalKey = 1
