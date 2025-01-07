@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
     ButtonGroup: typeof import('primevue/buttongroup')['default']
+    Checkbox: typeof import('primevue/checkbox')['default']
+    ConfirmDialog: typeof import('./src/components/confirmDialog.vue')['default']
     DynamicDialog: typeof import('primevue/dynamicdialog')['default']
     Form: typeof import('@primevue/forms/form')['default']
     InputText: typeof import('primevue/inputtext')['default']
@@ -18,6 +20,7 @@ declare module 'vue' {
     OrganizationChart: typeof import('primevue/organizationchart')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SettingsDialog: typeof import('./src/components/btree/settingsDialog.vue')['default']
     Toast: typeof import('primevue/toast')['default']
   }
   export interface ComponentCustomProperties {

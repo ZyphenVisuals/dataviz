@@ -53,6 +53,8 @@ import { useDialog } from 'primevue/usedialog'
 import { useToast } from 'primevue/usetoast'
 
 import numberDialog from '@/components/numberDialog.vue'
+import setttingsDialog from '@/components/btree/settingsDialog.vue'
+import confirmDialog from '@/components/confirmDialog.vue'
 
 type BTreeNode = {
   keys: Array<number>
@@ -67,7 +69,7 @@ const btree = ref<BTreeNode>({
   key: 0,
 })
 const branchingFactor = ref(2)
-const stepMode = ref(true)
+const stepMode = ref(false)
 
 let globalKey = 1
 
@@ -254,13 +256,45 @@ const showRemoveNumber = () => {
 }
 
 const showSettings = () => {
-  dialog.open(numberDialog, {
+  dialog.open(setttingsDialog, {
+    data: {
+      branchingFactor: branchingFactor.value,
+      stepMode: stepMode.value,
+    },
     props: {
-      header: 'Branching factor',
+      header: 'Setttings',
       modal: true,
     },
     onClose: (opt) => {
-      console.log(opt)
+      stepMode.value = opt?.data.stepMode
+
+      if (branchingFactor.value !== opt?.data.branchingFactor && btree.value.keys.length > 0) {
+        // warn user about losing data
+        dialog.open(confirmDialog, {
+          data: {
+            message:
+              'Changing the branching factor will clear the tree. Are you sure you want to continue?',
+          },
+          props: {
+            header: 'Warning',
+            modal: true,
+          },
+          onClose: (optC) => {
+            console.log(opt)
+            if (optC?.data.confirm) {
+              branchingFactor.value = opt?.data.branchingFactor
+              btree.value = {
+                keys: [],
+                children: [],
+                key: 0,
+              }
+              globalKey = 1
+            }
+          },
+        })
+      } else {
+        branchingFactor.value = opt?.data.branchingFactor
+      }
     },
   })
 }
