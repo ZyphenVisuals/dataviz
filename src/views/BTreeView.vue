@@ -163,7 +163,7 @@ async function insertNonFull(node: BTreeNode, number: number) {
     }
 
     // if the child is full, split it
-    if (node.children[i].keys.length === 2 * branchingFactor.value - 1) {
+    if (node.children[i].keys.length === 2 * branchingFactor.value) {
       await inform(`Splitting child node [${node.children[i].keys.join(' ')}]...`, [
         node,
         node.children[i],
@@ -212,8 +212,10 @@ function splitChild(parent: BTreeNode, index: number) {
 }
 
 async function addNumber(number: number) {
-  // if the root is full, increase the height of the tree
-  if (btree.value.keys.length === 2 * branchingFactor.value - 1) {
+  await insertNonFull(btree.value, number)
+
+  // if the root is overfull, increase the height of the tree
+  if (btree.value.keys.length === 2 * branchingFactor.value + 1) {
     await inform('Splitting root...', [btree.value])
     const newRoot = {
       keys: [],
@@ -225,9 +227,6 @@ async function addNumber(number: number) {
     // split the old root
     splitChild(btree.value, 0)
   }
-
-  // otherwise insert into it
-  await insertNonFull(btree.value, number)
 }
 
 const showAddNumber = () => {

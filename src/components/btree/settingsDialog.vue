@@ -7,7 +7,12 @@
     class="flex flex-col gap-4 w-full sm:w-56"
   >
     <div class="flex flex-col gap-1">
-      <label for="branchingFactor">Branching factor</label>
+      <label for="branchingFactor"
+        >Minimum keys<span
+          class="pi pi-question-circle ml-2"
+          v-tooltip="'The maximum key count will be double.'"
+        ></span>
+      </label>
       <InputText name="branchingFactor" type="number" fluid />
       <Message
         v-if="$form.branchingFactor?.invalid"
