@@ -154,6 +154,12 @@ async function insertNonFull(node: BTreeNode, number: number) {
     }
     i++
 
+    // check the number is not already in the node
+    if (node.keys.includes(number)) {
+      showToast(`Number ${number} is already in the tree.`, 'error')
+      return
+    }
+
     // if the child is full, split it
     if (node.children[i].keys.length === 2 * branchingFactor.value - 1) {
       await inform(`Splitting child node [${node.children[i].keys.join(' ')}]...`, [
