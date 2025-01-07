@@ -57,6 +57,7 @@ import numberDialog from '@/components/numberDialog.vue'
 type BTreeNode = {
   keys: Array<number>
   children: Array<BTreeNode>
+  styleClass?: string
 }
 
 const btree = ref<BTreeNode>({
@@ -73,10 +74,16 @@ async function wait() {
   return new Promise((resolve) => setTimeout(resolve, 1000))
 }
 
-async function inform(message: string) {
+async function inform(message: string, highlightNodes: Array<BTreeNode>) {
   if (stepMode.value) {
+    for (const highlightNode of highlightNodes) {
+      highlightNode.styleClass = '!bg-primary !text-primary-contrast'
+    }
     showToast(message, 'info')
     await wait()
+    for (const highlightNode of highlightNodes) {
+      delete highlightNode.styleClass
+    }
   }
 }
 
@@ -119,6 +126,7 @@ async function insertNonFull(node: BTreeNode, number: number) {
   if (node.children.length === 0) {
     await inform(
       `Inserting ${number} into ${node.keys.length > 0 ? 'node [' + node.keys.join(' ') + ']' : ' the root node'}...`,
+      [node],
     )
 
     // insert the number into the node
@@ -135,7 +143,7 @@ async function insertNonFull(node: BTreeNode, number: number) {
     node.keys.splice(i + 1, 0, number)
     showToast(`Number ${number} added.`, 'success')
   } else {
-    await inform(`Searching children of node [${node.keys.join(' ')}]...`)
+    await inform(`Searching children of node [${node.keys.join(' ')}]...`, [node])
     // find the child to insert into
     while (i >= 0 && number < node.keys[i]) {
       i--
@@ -144,7 +152,10 @@ async function insertNonFull(node: BTreeNode, number: number) {
 
     // if the child is full, split it
     if (node.children[i].keys.length === 2 * branchingFactor.value - 1) {
-      await inform(`Splitting child node [${node.children[i].keys.join(' ')}]...`)
+      await inform(`Splitting child node [${node.children[i].keys.join(' ')}]...`, [
+        node,
+        node.children[i],
+      ])
 
       splitChild(node, i)
 
@@ -190,7 +201,7 @@ function splitChild(parent: BTreeNode, index: number) {
 async function addNumber(number: number) {
   // if the root is full, increase the height of the tree
   if (btree.value.keys.length === 2 * branchingFactor.value - 1) {
-    await inform('Splitting root...')
+    await inform('Splitting root...', [btree.value])
     const newRoot = {
       keys: [],
       children: [btree.value],
