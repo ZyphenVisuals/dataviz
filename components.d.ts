@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Avatar: typeof import('primevue/avatar')['default']
     Button: typeof import('primevue/button')['default']
     ButtonGroup: typeof import('primevue/buttongroup')['default']
     DynamicDialog: typeof import('primevue/dynamicdialog')['default']
@@ -22,5 +23,6 @@ declare module 'vue' {
   }
   export interface ComponentCustomProperties {
     Ripple: typeof import('primevue/ripple')['default']
+    Tooltip: typeof import('primevue/tooltip')['default']
   }
 }

@@ -6,7 +6,7 @@
     class="flex flex-col gap-4 w-full sm:w-56"
   >
     <div class="flex flex-col gap-1">
-      <InputText name="number" type="number" fluid />
+      <InputText name="number" type="number" fluid autofocus="true" />
       <Message v-if="$form.number?.invalid" severity="error" size="small" variant="simple">{{
         $form.number.error?.message
       }}</Message>
@@ -41,7 +41,7 @@ resolver.value = ({ values }: any) => {
 const onFormSubmit = (e: any) => {
   if (e.valid) {
     dialogRef.value.close({
-      number: e.values.number,
+      number: parseInt(e.values.number),
     })
   }
 }

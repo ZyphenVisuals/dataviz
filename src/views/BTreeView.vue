@@ -1,14 +1,20 @@
 <template>
   <main class="flex-1 relative flex items-center">
     <div class="flex-1">
-      <h1 class="text-center text-2xl font-bold text-muted-color" v-if="data.label === undefined">
-        Insert an element to get started
-      </h1>
-      <OrganizationChart :value="data" v-else>
+      <OrganizationChart :value="btree" v-if="btree.keys.length > 0">
         <template #default="slotProps">
-          <span>{{ slotProps.node.label }}</span>
+          <div class="py-1">
+            <div class="text-center">
+              <span v-for="key in slotProps.node.keys" :key="key" class="px-1 py-0">
+                {{ key }}
+              </span>
+            </div>
+          </div>
         </template>
       </OrganizationChart>
+      <h1 v-else class="text-center text-2xl font-semibold text-muted-color">
+        Insert an element to get started...
+      </h1>
     </div>
     <div>
       <ButtonGroup class="absolute bottom-8 left-1/2 -translate-x-1/2">
@@ -18,8 +24,24 @@
           severity="secondary"
           raised
           @click="showAddNumber"
+          v-tooltip.top="'Add number (+)'"
         ></Button>
-        <Button icon="pi pi-minus" rounded severity="secondary" raised></Button>
+        <Button
+          icon="pi pi-minus"
+          rounded
+          severity="secondary"
+          raised
+          @click="showRemoveNumber"
+          v-tooltip.top="'Remove number (-)'"
+        ></Button>
+        <Button
+          icon="pi pi-cog"
+          rounded
+          severity="secondary"
+          raised
+          @click="showSettings"
+          v-tooltip.top="'Settings (s)'"
+        ></Button>
       </ButtonGroup>
     </div>
   </main>
@@ -32,10 +54,31 @@ import { useToast } from 'primevue/usetoast'
 
 import numberDialog from '@/components/numberDialog.vue'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const data: any = ref({})
+type BTreeNode = {
+  keys: Array<number>
+  children: Array<BTreeNode>
+}
+
+const btree = ref<BTreeNode>({
+  keys: [],
+  children: [],
+})
+const branchingFactor = ref(2)
+const stepMode = ref(true)
+
 const dialog = useDialog()
 const toast = useToast()
+
+async function wait() {
+  return new Promise((resolve) => setTimeout(resolve, 1000))
+}
+
+async function inform(message: string) {
+  if (stepMode.value) {
+    showToast(message, 'info')
+    await wait()
+  }
+}
 
 function showToast(message: string, severity: 'success' | 'info' | 'error') {
   switch (severity) {
@@ -70,20 +113,142 @@ function showToast(message: string, severity: 'success' | 'info' | 'error') {
   }
 }
 
-function addNumber(number: number) {
-  data.value.label += ' ' + number
-  showToast(`Number ${number} added.`, 'success')
+async function insertNonFull(node: BTreeNode, number: number) {
+  let i = node.keys.length - 1
+
+  if (node.children.length === 0) {
+    await inform(
+      `Inserting ${number} into ${node.keys.length > 0 ? 'node [' + node.keys.join(' ') + ']' : ' the root node'}...`,
+    )
+
+    // insert the number into the node
+    while (i >= 0 && number < node.keys[i]) {
+      i--
+    }
+
+    // check the number is not already in the node
+    if (node.keys.includes(number)) {
+      showToast(`Number ${number} is already in the tree.`, 'error')
+      return
+    }
+
+    node.keys.splice(i + 1, 0, number)
+    showToast(`Number ${number} added.`, 'success')
+  } else {
+    await inform(`Searching children of node [${node.keys.join(' ')}]...`)
+    // find the child to insert into
+    while (i >= 0 && number < node.keys[i]) {
+      i--
+    }
+    i++
+
+    // if the child is full, split it
+    if (node.children[i].keys.length === 2 * branchingFactor.value - 1) {
+      await inform(`Splitting child node [${node.children[i].keys.join(' ')}]...`)
+
+      splitChild(node, i)
+
+      // determine which of the two children to insert into
+      if (number > node.keys[i]) {
+        i++
+      }
+    }
+
+    await insertNonFull(node.children[i], number)
+  }
+}
+
+function splitChild(parent: BTreeNode, index: number) {
+  const child = parent.children[index]
+  const newChild: BTreeNode = {
+    keys: [],
+    children: [],
+  }
+
+  // insert the new child into the parent
+  parent.children.splice(index + 1, 0, newChild)
+
+  // find the middle key
+  const middle = Math.floor(child.keys.length / 2)
+  const middleKey = child.keys[middle]
+
+  // move the middle key to the parent
+  parent.keys.splice(index, 0, middleKey)
+
+  // move the right half of the keys to the new child
+  newChild.keys = child.keys.splice(middle + 1)
+
+  // move the right half of the children to the new child
+  if (child.children.length > 0) {
+    newChild.children = child.children.splice(middle + 1)
+  }
+
+  // remove the middle key from the child
+  child.keys.pop()
+}
+
+async function addNumber(number: number) {
+  // if the root is full, increase the height of the tree
+  if (btree.value.keys.length === 2 * branchingFactor.value - 1) {
+    await inform('Splitting root...')
+    const newRoot = {
+      keys: [],
+      children: [btree.value],
+    }
+    btree.value = newRoot
+
+    // split the old root
+    splitChild(btree.value, 0)
+  }
+
+  // otherwise insert into it
+  await insertNonFull(btree.value, number)
 }
 
 const showAddNumber = () => {
   dialog.open(numberDialog, {
     props: {
-      header: 'Pick a number',
+      header: 'Add number',
       modal: true,
     },
     onClose: (opt) => {
       addNumber(opt?.data.number)
     },
   })
+}
+
+const showRemoveNumber = () => {
+  dialog.open(numberDialog, {
+    props: {
+      header: 'Remove number',
+      modal: true,
+    },
+    onClose: (opt) => {
+      console.log(opt)
+      //removeNumber(opt?.data.number)
+    },
+  })
+}
+
+const showSettings = () => {
+  dialog.open(numberDialog, {
+    props: {
+      header: 'Branching factor',
+      modal: true,
+    },
+    onClose: (opt) => {
+      console.log(opt)
+    },
+  })
+}
+
+onkeyup = (e: KeyboardEvent) => {
+  if (e.key === '+') {
+    showAddNumber()
+  } else if (e.key === '-') {
+    showRemoveNumber()
+  } else if (e.key === 's') {
+    showSettings()
+  }
 }
 </script>
