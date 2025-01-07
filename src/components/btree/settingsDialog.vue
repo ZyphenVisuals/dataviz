@@ -8,9 +8,9 @@
   >
     <div class="flex flex-col gap-1">
       <label for="branchingFactor"
-        >Minimum keys<span
+        >Branching factor (t)<span
           class="pi pi-question-circle ml-2"
-          v-tooltip="'The maximum key count will be double.'"
+          v-tooltip="'Keys will be between t-1 and 2t-1.'"
         ></span>
       </label>
       <InputText name="branchingFactor" type="number" fluid />
