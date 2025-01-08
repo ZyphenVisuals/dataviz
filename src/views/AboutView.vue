@@ -5,7 +5,7 @@
         <h2>Why did I make this?</h2>
         <p>
           This was developed as part of a homework received during the
-          <code>Advanced Data Structures</code> course that I'm currenttly taking. The goal was to
+          <code>Advanced Data Structures</code> course that I'm currently taking. The goal was to
           implement at least one of the data structures that we've learned in class into our own
           project.
         </p>
@@ -21,7 +21,7 @@
         <p>
           Since I decided to make this as a web app, I used a framework I was already somewhat
           familiar with, namely <a href="https://vuejs.org" target="_blank">Vue.js</a>. I also used
-          <a href="https://tailwindcss.com/" target="_blank">Tailwind CSS</a>, my prefered way of
+          <a href="https://tailwindcss.com/" target="_blank">Tailwind CSS</a>, my preferred way of
           writing CSS.
         </p>
         <p>
