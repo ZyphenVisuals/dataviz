@@ -6,7 +6,10 @@ const headerItems = ref([
   { label: 'Home', route: '/' },
   {
     label: 'Trees',
-    items: [{ label: 'B-Tree', route: '/btree' }],
+    items: [
+      { label: 'Binary Search Tree', route: '/bst' },
+      { label: 'B-Tree', route: '/btree' },
+    ],
   },
   { label: 'About', route: '/about' },
 ])

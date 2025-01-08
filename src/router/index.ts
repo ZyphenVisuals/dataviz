@@ -19,6 +19,11 @@ const router = createRouter({
       name: 'btree',
       component: () => import('../views/BTreeView.vue'),
     },
+    {
+      path: '/bst',
+      name: 'bst',
+      component: () => import('../views/BSTView.vue'),
+    },
   ],
 })
 
