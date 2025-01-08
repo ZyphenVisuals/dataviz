@@ -12,7 +12,7 @@ This tool is available online on my website, [dataviz.zyphenvisuals.com](https:/
 
 ## Local
 
-The following section was kept from the Vue 3 scaffolding `README.md`.
+The following section was kept from the `create-vue` scaffolding `README.md`.
 
 ### Recommended IDE Setup
 
