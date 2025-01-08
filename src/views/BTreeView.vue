@@ -84,6 +84,7 @@ const stepMode = ref(false)
 const speed = ref(1000)
 
 let globalKey = 1
+let freezeHotkeys = false
 
 const dialog = useDialog()
 const toast = useToast()
@@ -392,30 +393,35 @@ async function removeNumber(value: number) {
 }
 
 const showAddNumber = () => {
+  freezeHotkeys = true
   dialog.open(numberDialog, {
     props: {
       header: 'Add number',
       modal: true,
     },
     onClose: (opt) => {
+      freezeHotkeys = false
       addNumber(opt?.data.number)
     },
   })
 }
 
 const showRemoveNumber = () => {
+  freezeHotkeys = true
   dialog.open(numberDialog, {
     props: {
       header: 'Remove number',
       modal: true,
     },
     onClose: (opt) => {
+      freezeHotkeys = false
       removeNumber(opt?.data.number)
     },
   })
 }
 
 const showSettings = () => {
+  freezeHotkeys = true
   dialog.open(setttingsDialog, {
     data: {
       branchingFactor: branchingFactor.value,
@@ -427,11 +433,13 @@ const showSettings = () => {
       modal: true,
     },
     onClose: (opt) => {
+      freezeHotkeys = false
       stepMode.value = opt?.data.stepMode
       speed.value = opt?.data.speed
 
       if (branchingFactor.value !== opt?.data.branchingFactor && btree.value.keys.length > 0) {
         // warn user about losing data
+        freezeHotkeys = true
         dialog.open(confirmDialog, {
           data: {
             message:
@@ -442,7 +450,7 @@ const showSettings = () => {
             modal: true,
           },
           onClose: (optC) => {
-            console.log(opt)
+            freezeHotkeys = false
             if (optC?.data.confirm) {
               branchingFactor.value = opt?.data.branchingFactor
               btree.value = {
@@ -462,6 +470,7 @@ const showSettings = () => {
 }
 
 onkeyup = (e: KeyboardEvent) => {
+  if (freezeHotkeys) return
   if (e.key === '+') {
     showAddNumber()
   } else if (e.key === '-') {
