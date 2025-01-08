@@ -215,7 +215,7 @@ async function removeNumber(number: number) {
       }
 
       // if the node has only one child
-      if (current.children[0].label === undefined || current.children[1] === undefined) {
+      if (current.children[0].label === undefined || current.children[1].label === undefined) {
         // remove the node and replace it with its child
         const child =
           current.children[0].label === undefined ? current.children[1] : current.children[0]
