@@ -219,7 +219,7 @@ async function removeNumber(number: number) {
         // remove the node and replace it with its child
         const child =
           current.children[0].label === undefined ? current.children[1] : current.children[0]
-        await inform(`Replacing [${number}] with its child [${child.label}]`, [current])
+        await inform(`Replacing [${number}] with its child [${child.label}]`, [current, child])
         current.label = child.label
         current.children = child.children
         showToast(`Number ${number} removed`, 'success')

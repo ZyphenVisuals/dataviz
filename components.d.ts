@@ -20,7 +20,7 @@ declare module 'vue' {
     OrganizationChart: typeof import('primevue/organizationchart')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SettingsDialog: typeof import('./src/components/bst/settingsDialog.vue')['default']
+    SettingsDialog: typeof import('./src/components/btree/settingsDialog.vue')['default']
     Slider: typeof import('primevue/slider')['default']
     Toast: typeof import('primevue/toast')['default']
   }
