@@ -81,6 +81,7 @@ const btree = ref<BTreeNode>({
 })
 const branchingFactor = ref(3)
 const stepMode = ref(false)
+const speed = ref(1000)
 
 let globalKey = 1
 
@@ -88,7 +89,7 @@ const dialog = useDialog()
 const toast = useToast()
 
 async function wait() {
-  return new Promise((resolve) => setTimeout(resolve, 1000))
+  return new Promise((resolve) => setTimeout(resolve, speed.value))
 }
 
 async function inform(message: string, highlightNodes: Array<BTreeNode>) {
@@ -120,7 +121,7 @@ function showToast(message: string, severity: 'success' | 'info' | 'error') {
         severity: 'info',
         summary: 'Info',
         detail: message,
-        life: 1000,
+        life: speed.value,
       })
       break
 
@@ -419,6 +420,7 @@ const showSettings = () => {
     data: {
       branchingFactor: branchingFactor.value,
       stepMode: stepMode.value,
+      speed: speed.value,
     },
     props: {
       header: 'Setttings',
@@ -426,6 +428,7 @@ const showSettings = () => {
     },
     onClose: (opt) => {
       stepMode.value = opt?.data.stepMode
+      speed.value = opt?.data.speed
 
       if (branchingFactor.value !== opt?.data.branchingFactor && btree.value.keys.length > 0) {
         // warn user about losing data
