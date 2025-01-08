@@ -8,7 +8,7 @@ This was developed as part of a homework received during the `Advanced Data Stru
 
 ## Online (recommended)
 
-This tool is available online at dataviz.zyphenvisuals.com.
+This tool is available online on my website, [dataviz.zyphenvisuals.com](https://dataviz.zyphenvisuals.com).
 
 ## Local
 
