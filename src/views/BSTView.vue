@@ -129,7 +129,7 @@ async function addNumber(number: number) {
       label: number,
       children: [],
     }
-    await inform(`Adding ${number} to the root`, [bst.value])
+    await inform(`Adding [${number}] as the root`, [bst.value])
     showToast(`Number ${number} added`, 'success')
     return
   }
@@ -150,12 +150,12 @@ async function addNumber(number: number) {
           label: undefined,
           children: [],
         })
-        await inform(`Adding ${number} to the left of ${current.label}`, [current.children[0]])
+        await inform(`Adding [${number}] to the left of [${current.label}]`, [current.children[0]])
         showToast(`Number ${number} added`, 'success')
         return
       } else if (current.children[0].label === undefined) {
         current.children[0].label = number
-        await inform(`Adding ${number} to the left of ${current.label}`, [current.children[0]])
+        await inform(`Adding [${number}] to the left of [${current.label}]`, [current.children[0]])
         showToast(`Number ${number} added`, 'success')
         return
       } else {
@@ -173,12 +173,12 @@ async function addNumber(number: number) {
           label: number,
           children: [],
         })
-        await inform(`Adding ${number} to the right of ${current.label}`, [current.children[1]])
+        await inform(`Adding [${number}] to the right of [${current.label}]`, [current.children[1]])
         showToast(`Number ${number} added`, 'success')
         return
       } else if (current.children[1].label === undefined) {
         current.children[1].label = number
-        await inform(`Adding ${number} to the right of ${current.label}`, [current.children[1]])
+        await inform(`Adding [${number}] to the right of [${current.label}]`, [current.children[1]])
         showToast(`Number ${number} added`, 'success')
         return
       } else {
@@ -209,7 +209,7 @@ async function removeNumber(number: number) {
       if (current.children[0] === undefined) {
         // remove the node
         current.label = undefined
-        await inform(`Removing ${number}`, [current])
+        await inform(`Removing the leaf node [${number}]`, [current])
         showToast(`Number ${number} removed`, 'success')
         return
       }
@@ -219,9 +219,9 @@ async function removeNumber(number: number) {
         // remove the node and replace it with its child
         const child =
           current.children[0].label === undefined ? current.children[1] : current.children[0]
+        await inform(`Replacing [${number}] with its child [${child.label}]`, [current])
         current.label = child.label
         current.children = child.children
-        await inform(`Removing ${number}`, [current])
         showToast(`Number ${number} removed`, 'success')
         return
       }
@@ -229,26 +229,26 @@ async function removeNumber(number: number) {
       // if the node has two children
       // find the smallest node in the right subtree
       let smallest = current.children[1]
-      await inform(`Finding the smallest node in the right subtree of ${number}`, [smallest])
+      await inform(`Finding the smallest node in the right subtree of [${number}]`, [smallest])
       while (smallest.children[0] !== undefined && smallest.children[0].label !== undefined) {
         smallest = smallest.children[0]
-        await inform(`Finding the smallest node in the right subtree of ${number}`, [smallest])
+        await inform(`Finding the smallest node in the right subtree of [${number}]`, [smallest])
       }
 
       await inform(
-        `Found the smallest node [${smallest.label}] in the right subtree of ${number}`,
+        `Found the smallest node [${smallest.label}] in the right subtree of [${number}`],
         [smallest],
       )
 
       // replace the node with the smallest node
-      await inform(`Replacing ${number} with ${smallest.label}`, [current])
+      await inform(`Replacing [${number}] with [${smallest.label}]`, [current, smallest])
       current.label = smallest.label
 
       if (smallest.children[1] === undefined) {
-        await inform(`Removing ${smallest.label}`, [smallest])
+        await inform(`Removing [${smallest.label}]`, [smallest])
         smallest.label = undefined
       } else {
-        await inform(`Replacing ${smallest.label} with its right child`, [
+        await inform(`Replacing [${smallest.label}] with its right child`, [
           smallest,
           smallest.children[1],
         ])
