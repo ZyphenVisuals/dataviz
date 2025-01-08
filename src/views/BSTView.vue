@@ -236,7 +236,7 @@ async function removeNumber(number: number) {
       }
 
       await inform(
-        `Found the smallest node [${smallest.label}] in the right subtree of [${number}`],
+        `Found the smallest node [${smallest.label}] in the right subtree of [${number}]`,
         [smallest],
       )
 
