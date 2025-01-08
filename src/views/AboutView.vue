@@ -31,7 +31,7 @@
           <a href="https://primevue.org/organizationchart/" target="_blank">OrganizationChart</a>
           component, which I used to display the trees.
         </p>
-        <p>Finally, all of the algorithms and data structures were implemented by me.</p>
+        <p>Finally, all of the algorithms and data structures were implemented by me, with the help of a myriad of articles, lecture notes and YouTube videos.</p>
       </div>
     </div>
   </main>
